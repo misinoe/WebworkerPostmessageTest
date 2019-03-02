@@ -1,0 +1,38 @@
+<!doctype html>
+<h1>Webworker postmessage latency test</h1>
+<p>Measure delay when postMesage() mutual</p>
+
+<label>Payload String size:</label>
+<input type="number" value="0" id="payload-input"></input>
+<div id='log'></div>
+
+<script>
+  const div = document.getElementById('log');
+  const payloadInput = document.getElementById('payload-input');
+
+  const insertLog = log => {
+    div.innerHTML = `<p>${log}</p>` + div.innerHTML;
+  }
+
+  // ----
+
+  const worker = new Worker('./worker.js');
+  worker.onmessage = event => {
+    insertLog(`latency: ${performance.now() - event.data.time} ms`);
+  };
+
+  const ping = () => {
+    let payload = '';
+    const payloadSize = parseInt(payloadInput.value);
+    for (let i = payloadSize; i > 0; i--) {
+      payload += 'a';
+    }
+    // insertLog(`posetMessage to WebWorker. paylod size: ${payload.length}`);
+
+    worker.postMessage({time: performance.now(), payload});
+  };
+
+  setInterval(() => {
+    ping();
+  }, 1000);
+</script>
