@@ -13,7 +13,7 @@
 
   const insertLog = log => {
     elements.unshift(`<p>${log}</p>`);
-    if (elements.length > 10) elements.shift();
+    if (elements.length > 10) elements.pop();
     div.innerHTML = elements.join('');
   }
 
