@@ -9,9 +9,12 @@
 <script>
   const div = document.getElementById('log');
   const payloadInput = document.getElementById('payload-input');
+  const elements = [];
 
   const insertLog = log => {
-    div.innerHTML = `<p>${log}</p>` + div.innerHTML;
+    elements.unshift(`<p>${log}</p>`);
+    if (elements.length > 10) elements.shift();
+    div.innerHTML = elements.join('');
   }
 
   // ----
